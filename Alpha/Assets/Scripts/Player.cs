@@ -3,17 +3,16 @@ using System.Collections;
 
 [RequireComponent (typeof (Controller2D))]
 public class Player : MonoBehaviour {
-
+	
 	public float jumpHeight;
 	public float timeToJumpApex;
-	public float doubleJumpHeight;
 	public float timeToDoubleJumpApex;
 	//Lower results in reaching terminal velocity quicker
 	public float accelTimeAirbourne;
 	public float accelTimeGrounded;
 	public float walkSpeed;
 	public float sprintSpeed;
-
+	
 	private float gravity;
 	private float jumpVelocity;
 	private float doubleJumpVelocity;
@@ -36,9 +35,9 @@ public class Player : MonoBehaviour {
 	private bool hasDoubleJump;
 	
 	private InputHelper inputHelper;
-
+	
 	private Controller2D controller;
-
+	
 	void Start() {
 		this.inputHelper = new InputHelper();
 		this.controller = GetComponent<Controller2D> ();
@@ -47,24 +46,25 @@ public class Player : MonoBehaviour {
 		this.doubleJumpVelocity = PhysicsHelperMethods.JumpVelocity(this.gravity, this.timeToDoubleJumpApex);
 		this.targetSpeed = this.walkSpeed;
 	}
-
+	
 	void Update() {
-	
+		
 		this.inputHelper.Update();
-	
+		
 		//Reset velocity whenever top/bottom collision
 		if (this.controller.CollInfo.isAbove || this.controller.CollInfo.isBelow) {
 			this.velocityVect.y = 0;
-			this.hasDoubleJump = true;
+			this.hasDoubleJump = this.controller.CollInfo.isBelow;
 		}
 		//Handles jumps and double jumps
 		if (Input.GetButtonDown ("Jump")) {
 			if (this.controller.CollInfo.isBelow) {
 				this.velocityVect.y = this.jumpVelocity;
-
+				
 			} else if (!this.controller.CollInfo.isBelow && this.hasDoubleJump) {
 				this.velocityVect.y = 0;
 				this.velocityVect.y = this.doubleJumpVelocity;
+				this.hasDoubleJump = false;
 			}
 		}
 		

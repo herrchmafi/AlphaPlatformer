@@ -3,20 +3,20 @@ using System.Collections;
 
 [RequireComponent (typeof (BoxCollider2D))]
 public class RaycastController : MonoBehaviour {
-
+	
 	public LayerMask collisionMask;
 	
 	protected const float skinWidth = .015f;
 	public int horizontalRayCount;
 	public int verticalRayCount;
-
+	
 	protected float horizontalRaySpacing;
-
+	
 	protected float verticalRaySpacing;
-
+	
 	protected BoxCollider2D boxCollider;
 	protected RaycastOrigins raycastOrigins;
-
+	
 	public virtual void Start() {
 		this.boxCollider = GetComponent<BoxCollider2D> ();
 		this.CalculateRaySpacing ();

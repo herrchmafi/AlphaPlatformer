@@ -18,6 +18,8 @@ public class Controller2D : RaycastController {
 		public bool climbingSlope;
 		public bool descendingSlope;
 		public float slopeAngle, slopeAngleOld;
+		//Left is -1, right is 1
+		public int faceDir;
 		public Vector3 prevDist;
 		
 		public void Reset() {
@@ -32,6 +34,7 @@ public class Controller2D : RaycastController {
 	}
 	public override void Start() {
 		base.Start ();
+		this.collisionInfo.faceDir = 1;
 	}
 	
 	public void Move(Vector3 distVect, bool standingOnPlatform = false) {
@@ -39,12 +42,16 @@ public class Controller2D : RaycastController {
 		this.collisionInfo.Reset ();
 		this.collisionInfo.prevDist = distVect;
 		
+		if (distVect.x != 0) {
+			this.collisionInfo.faceDir = (int)Mathf.Sign(distVect.x);
+		}
+		
 		if (distVect.y < 0) {
 			this.DescendSlope(ref distVect);
 		}
-		if (distVect.x != 0) {
-			this.HorizontalCollisions (ref distVect);
-		}
+		
+		this.HorizontalCollisions (ref distVect);
+		
 		if (distVect.y != 0) {
 			this.VerticalCollisions (ref distVect);
 		}
@@ -56,8 +63,12 @@ public class Controller2D : RaycastController {
 	}
 	
 	private void HorizontalCollisions(ref Vector3 distVect) {
-		float dirX = Mathf.Sign (distVect.x);
+		float dirX = this.collisionInfo.faceDir;
 		float rayLength = Mathf.Abs (distVect.x) + skinWidth;
+		
+		if (Mathf.Abs(distVect.x) < skinWidth) {
+			rayLength = 2 * skinWidth;
+		}
 		
 		for (int i = 0; i < horizontalRayCount; i ++) {
 			Vector2 rayOrigin = (dirX == -1) ? this.raycastOrigins.bottomLeft : this.raycastOrigins.bottomRight;

@@ -4,7 +4,8 @@ using System.Collections;
 [RequireComponent (typeof (Controller2D))]
 public class Player : MonoBehaviour {
 	//Change in inspector, values set just as a reference for what I think works well
-	public float jumpHeight = 4.0f;
+	public float maxJumpHeight = 4.0f;
+	public float minJumpHeight = 1.0f;
 	public float timeToJumpApex = .4f;
 	public float timeToDoubleJumpApex = .3f;
 	//Lower results in reaching terminal velocity quicker
@@ -14,7 +15,7 @@ public class Player : MonoBehaviour {
 	public float sprintSpeed = 12.0f;
 	
 	public float wallSlideSpeed = 3.0f;
-	public float wallStickTime = .5f;
+	public float wallStickTime = .25f;
 	private Timer wallStickTimer;
 	
 	public Vector2 wallOff;
@@ -22,7 +23,8 @@ public class Player : MonoBehaviour {
 	
 	
 	private float gravity;
-	private float jumpVelocity;
+	private float maxJumpVelocity;
+	private float minJumpVelocity;
 	private float doubleJumpVelocity;
 	
 	[SerializeField]
@@ -51,8 +53,9 @@ public class Player : MonoBehaviour {
 	void Start() {
 		this.inputHelper = new InputHelper();
 		this.controller = GetComponent<Controller2D> ();
-		this.gravity = PhysicsHelperMethods.ObjectGravity(this.jumpHeight, this.timeToJumpApex);
-		this.jumpVelocity = PhysicsHelperMethods.JumpVelocity(this.gravity, this.timeToJumpApex);
+		this.gravity = PhysicsHelperMethods.ObjectGravity(this.maxJumpHeight, this.timeToJumpApex);
+		this.maxJumpVelocity = PhysicsHelperMethods.JumpVelocity(this.gravity, this.timeToJumpApex);
+		this.minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(this.gravity) * this.minJumpHeight);
 		this.doubleJumpVelocity = PhysicsHelperMethods.JumpVelocity(this.gravity, this.timeToDoubleJumpApex);
 		this.targetSpeed = this.walkSpeed;
 		this.wallStickTimer = new Timer();
@@ -72,7 +75,8 @@ public class Player : MonoBehaviour {
 				this.targetSpeed = this.walkSpeed;
 				this.aState = ActionState.WALKING;
 			} else {
-				this.targetSpeed = .0f;
+				//If player is idle and jumps, allows them to have some horizontal mobility
+				this.targetSpeed = this.walkSpeed;
 				this.aState = ActionState.IDLE;
 			}
 		}
@@ -113,17 +117,11 @@ public class Player : MonoBehaviour {
 			}
 		}
 		
-		//Reset velocity whenever top/bottom collision
-		if (this.controller.CollInfo.isAbove || this.controller.CollInfo.isBelow) {
-			this.velocityVect.y = 0;
-			this.hasDoubleJump = this.controller.CollInfo.isBelow;
-		}
-		
 		//Handles jumps and double jumps
 		if (Input.GetButtonDown ("Jump")) {
 			if (this.controller.CollInfo.isBelow) {
 				this.aState = ActionState.JUMPING;
-				this.velocityVect.y = this.jumpVelocity;
+				this.velocityVect.y = this.maxJumpVelocity;
 				
 			} else if (isWallSliding) {
 				this.hasDoubleJump = false;
@@ -145,12 +143,25 @@ public class Player : MonoBehaviour {
 				this.hasDoubleJump = false;
 			}
 		}
+		if (Input.GetButtonUp("Jump")) {
+			//Handles if player releases jump button early
+			//Will shortent jump
+			if (this.velocityVect.y > this.minJumpVelocity && this.hasDoubleJump) {
+				this.velocityVect.y = this.minJumpVelocity;
+			}
+		}
 		
 		if (!this.controller.CollInfo.isBelow && Mathf.Sign(this.velocityVect.y) == -1) {
 			this.aState = ActionState.FALLING;
 		}
 		
 		this.velocityVect.y += this.gravity * Time.deltaTime;
-		this.controller.Move (velocityVect * Time.deltaTime);
+		this.controller.Move (velocityVect * Time.deltaTime, input);
+		
+		//Reset velocity whenever top/bottom collision
+		if (this.controller.CollInfo.isAbove || this.controller.CollInfo.isBelow) {
+			this.velocityVect.y = 0;
+			this.hasDoubleJump = this.controller.CollInfo.isBelow;
+		}
 	}
 }

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - SunLight
   - DayNightManager
+  - PassThrough
   layers:
   - Default
   - TransparentFX

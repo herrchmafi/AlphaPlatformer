@@ -122,7 +122,7 @@ public class PlatformController : RaycastController {
 				rayOrigin += Vector2.right * (this.verticalRaySpacing * i);
 				RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up * dirY, rayLength, this.passengerMask);
 				Debug.DrawRay(rayOrigin, Vector3.up * dirY);
-				if (hit) {
+				if (hit && hit.distance != 0) {
 					if (!movedPassengers.Contains(hit.transform)) {
 						movedPassengers.Add(hit.transform);
 						float pushX = (dirY == 1) ? velocity.x : 0;
@@ -142,7 +142,7 @@ public class PlatformController : RaycastController {
 				rayOrigin += Vector2.up * (this.horizontalRaySpacing * i);
 				RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right * dirX, rayLength, this.passengerMask);
 				
-				if (hit) {
+				if (hit && hit.distance != 0) {
 					if (!movedPassengers.Contains(hit.transform)) {
 						movedPassengers.Add(hit.transform);
 						float pushX = velocity.x - (hit.distance - skinWidth) * dirX;
@@ -162,7 +162,7 @@ public class PlatformController : RaycastController {
 				Vector2 rayOrigin = raycastOrigins.topLeft + Vector2.right * (verticalRaySpacing * i);
 				RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up, rayLength, passengerMask);
 				
-				if (hit) {
+				if (hit && hit.distance != 0) {
 					if (!movedPassengers.Contains(hit.transform)) {
 						movedPassengers.Add(hit.transform);
 						float pushX = velocity.x;
@@ -177,12 +177,12 @@ public class PlatformController : RaycastController {
 	
 	
 	void OnDrawGizmos() {
-		if (localWaypoints != null) {
+		if (this.localWaypoints != null) {
 			Gizmos.color = Color.red;
 			float size = .3f;
 			
-			for (int i =0; i < localWaypoints.Length; i ++) {
-				Vector3 globalWaypointPos = (Application.isPlaying)?globalWaypoints[i] : localWaypoints[i] + transform.position;
+			for (int i = 0; i < this.localWaypoints.Length; i++) {
+				Vector3 globalWaypointPos = (Application.isPlaying) ? globalWaypoints[i] : this.localWaypoints[i] + transform.position;
 				Gizmos.DrawLine(globalWaypointPos - Vector3.up * size, globalWaypointPos + Vector3.up * size);
 				Gizmos.DrawLine(globalWaypointPos - Vector3.left * size, globalWaypointPos + Vector3.left * size);
 			}

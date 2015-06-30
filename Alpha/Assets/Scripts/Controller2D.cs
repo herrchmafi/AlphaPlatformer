@@ -11,12 +11,15 @@ public class Controller2D : RaycastController {
 		get { return this.collisionInfo; }
 	}
 	
+	private Vector2 playerInput;
+	
 	public struct CollisionInfo {
 		public bool isAbove, isBelow;
 		public bool isLeft, isRight;
 		
 		public bool climbingSlope;
 		public bool descendingSlope;
+		public bool isFallingThroughPlatform;
 		public float slopeAngle, slopeAngleOld;
 		//Left is -1, right is 1
 		public int faceDir;
@@ -32,15 +35,26 @@ public class Controller2D : RaycastController {
 			slopeAngle = 0;
 		}
 	}
+	
+	private void ResetIsFallingThroughPlatform() {
+		this.collisionInfo.isFallingThroughPlatform = false;
+	}
+	
 	public override void Start() {
 		base.Start ();
 		this.collisionInfo.faceDir = 1;
 	}
 	
 	public void Move(Vector3 distVect, bool standingOnPlatform = false) {
+		this.Move(distVect, Vector2.zero, standingOnPlatform);
+	}
+	
+	public void Move(Vector3 distVect, Vector2 input, bool standingOnPlatform = false) {
 		this.UpdateRaycastOrigins ();
 		this.collisionInfo.Reset ();
 		this.collisionInfo.prevDist = distVect;
+		
+		this.playerInput = input;
 		
 		if (distVect.x != 0) {
 			this.collisionInfo.faceDir = (int)Mathf.Sign(distVect.x);
@@ -127,6 +141,22 @@ public class Controller2D : RaycastController {
 			Debug.DrawRay(rayOrigin, Vector2.up * directionY * rayLength, Color.red);
 			
 			if (hit) {
+				if (hit.collider.tag == "PassThrough") {
+					if (directionY == 1 || hit.distance == 0) {
+						continue;
+					}
+					if (this.collisionInfo.isFallingThroughPlatform) {
+						continue;
+					}
+					//Allows for player to pass through from top of moving platform
+					if (this.playerInput.y == -1) {
+						this.collisionInfo.isFallingThroughPlatform = true;
+						//Weirdness for helping allow for moving through moving platform
+						//Downside is that you should not have moving platforms that you can move through have large y dimensions
+						Invoke("ResetIsFallingThroughPlatform", .5f);
+						continue;
+					}
+				}
 				distVect.y = (hit.distance - skinWidth) * directionY;
 				rayLength = hit.distance;
 				//Handles climbing slope displacement

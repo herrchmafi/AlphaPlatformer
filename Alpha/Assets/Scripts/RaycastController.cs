@@ -14,11 +14,16 @@ public class RaycastController : MonoBehaviour {
 	
 	protected float verticalRaySpacing;
 	
-	protected BoxCollider2D boxCollider;
+	public BoxCollider2D boxCollider;
+	
 	protected RaycastOrigins raycastOrigins;
 	
-	public virtual void Start() {
+	//Prevent null reference exceptions because this is referenced in other scripts' Start methods
+	public virtual void Awake() {
 		this.boxCollider = GetComponent<BoxCollider2D> ();
+	}
+	
+	public virtual void Start() {
 		this.CalculateRaySpacing ();
 	}
 	//Calculate references to specific positions of gameobject bounds

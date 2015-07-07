@@ -12,6 +12,9 @@ public class Controller2D : RaycastController {
 	}
 	
 	private Vector2 playerInput;
+	public Vector2 PlayerInput {
+		get { return this.playerInput; }
+	}
 	
 	public struct CollisionInfo {
 		public bool isAbove, isBelow;

@@ -18,8 +18,11 @@ public class SunLightController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		float currentIntensity = this.intensities[this.dayCycleController.currentHour];
-		float targetIntensity = this.intensities[this.dayCycleController.NextHour];
-		this.sunLight.intensity = Mathf.Lerp(currentIntensity, targetIntensity, this.dayCycleController.HourTimeDec);
+	
+		if (intensities.Length > 0) {
+			float currentIntensity = this.intensities[this.dayCycleController.currentHour];
+			float targetIntensity = this.intensities[this.dayCycleController.NextHour];
+			this.sunLight.intensity = Mathf.Lerp(currentIntensity, targetIntensity, this.dayCycleController.HourTimeDec);
+		}
 	}
 }

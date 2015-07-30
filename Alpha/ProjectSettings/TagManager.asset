@@ -8,6 +8,7 @@ TagManager:
   - DayNightManager
   - PassThrough
   - NightLight
+  - Event
   layers:
   - Default
   - TransparentFX
@@ -44,4 +45,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Base
+    uniqueID: 541799861
+    locked: 0
+  - name: BG
+    uniqueID: 3958913289
     locked: 0

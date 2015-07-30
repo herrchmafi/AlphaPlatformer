@@ -21,7 +21,6 @@ public class Player : MonoBehaviour {
 	public Vector2 wallOff;
 	public Vector2 wallJump;
 	
-	
 	private float gravity;
 	private float maxJumpVelocity;
 	private float minJumpVelocity;
@@ -45,6 +44,8 @@ public class Player : MonoBehaviour {
 	}
 	
 	private bool hasDoubleJump;
+	
+	private bool isInEventRange;
 	
 	private InputHelper inputHelper;
 	
@@ -163,5 +164,25 @@ public class Player : MonoBehaviour {
 			this.velocityVect.y = 0;
 			this.hasDoubleJump = this.controller.CollInfo.isBelow;
 		}
+		
+		if (this.isInEventRange && Input.GetButtonDown("Event")) {
+			this.test.IsSpeaking = true;
+		}
 	}
+	private EventNPCSpeech test;
+	#region Collider Messages
+	void OnTriggerEnter2D(Collider2D coll) {
+		if (coll.tag.Equals("Event")){
+			this.isInEventRange = true;
+			print("yes");
+			this.test = coll.GetComponent<EventNPCSpeech>();
+		}
+	}
+	
+	void OnTriggerExit2D(Collider2D other) {
+		if (other.tag.Equals("Event")) {
+			this.isInEventRange = false;
+		}
+	}
+	#endregion
 }

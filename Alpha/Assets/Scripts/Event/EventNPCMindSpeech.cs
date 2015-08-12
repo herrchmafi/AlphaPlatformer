@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EventNPCSpeech : EventText {
-
+public class EventNPCMindSpeech : EventText {
+	
 	private Transform target;
 	
 	private string[] textComponents;
@@ -41,7 +41,7 @@ public class EventNPCSpeech : EventText {
 		this.target = transform.parent;
 		this.speechTimer = new Timer();
 	}
-
+	
 	void Update() {
 		if (this.isSpeaking) {
 			this.speechTimer.Update();
@@ -49,13 +49,13 @@ public class EventNPCSpeech : EventText {
 			if (!this.speechTimer.IsTiming) {
 				this.speechTimer.Start();
 				this.textComponents = new string[3] { 
-				"This is a speech component, hear me roar!", 
-				"I have massive diarrhea", 
-				"This is the last of me, I promise!" 
+					"This is a speech component, hear me roar!", 
+					"I have massive diarrhea", 
+					"This is the last of me, I promise!" 
 				};
 				
 			} 
-			 if (this.speechTimer.Seconds >= this.secondsBetweenLetters) {
+			if (this.speechTimer.Seconds >= this.secondsBetweenLetters) {
 				this.speechTimer.Reset();
 				this.letterIndex++;
 			}
@@ -63,11 +63,13 @@ public class EventNPCSpeech : EventText {
 			//If so, update in speech contents, o.e. update speech index 
 			if (this.letterIndex <= this.textComponents[this.speechIndex].Length) {
 				this.currentSpeech = this.textComponents[this.speechIndex].Substring(0, this.letterIndex); 
-			}
+			} else if (this.speechIndex > this.textComponents[this.speechIndex].Length) {
+				this.Next();
+			} 
 		}
 	}
 	
-	public void Next() {
+	private void Next() {
 		//If speechIndex is greater or equal than speech components length, stop talking
 		//o.e. stop talking
 		if (this.speechIndex < this.textComponents.Length) {

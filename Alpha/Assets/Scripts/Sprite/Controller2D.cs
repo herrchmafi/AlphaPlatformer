@@ -87,7 +87,7 @@ public class Controller2D : RaycastController {
 			rayLength = 2 * skinWidth;
 		}
 		
-		for (int i = 0; i < horizontalRayCount; i ++) {
+		for (int i = 0; i < horizontalRayCount; i++) {
 			Vector2 rayOrigin = (dirX == -1) ? this.raycastOrigins.bottomLeft : this.raycastOrigins.bottomRight;
 			rayOrigin += Vector2.up * (horizontalRaySpacing * i);
 			RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right * dirX, rayLength, collisionMask);
@@ -95,7 +95,6 @@ public class Controller2D : RaycastController {
 			Debug.DrawRay(rayOrigin, Vector2.right * dirX * rayLength,Color.red);
 			
 			if (hit) {
-				
 				if (hit.distance == 0) {
 					continue;
 				}

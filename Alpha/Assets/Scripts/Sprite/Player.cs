@@ -32,6 +32,14 @@ public class Player : MonoBehaviour {
 	private Vector3 velocityVect;
 	private float velocityXSmoothing;
 	
+	public enum LocationState {
+		GROUNDED, AIRBOURNE
+	}
+	[SerializeField]
+	private LocationState lState;
+	public LocationState LState {
+		get { return this.LState; }
+	}
 	public enum ActionState {
 		IDLE, WALKING, SPRINTING,  
 		WALLSLIDING, WALLJUMPING, 
@@ -42,14 +50,19 @@ public class Player : MonoBehaviour {
 	public ActionState AState {
 		get { return this.aState; }
 	}
-	
+	private bool isFacingLeft;
 	private bool hasDoubleJump;
 	
-	private bool isInEventRange;
+	//Try to not have both of these happen
+	private bool isInNoPauseEventRange;
+	private bool isInPauseEventRange;
+	private EventNPCSpeech pauseEvent;
 	
 	private InputHelper inputHelper;
 	
 	private Controller2D controller;
+	
+	public GameObject mindBullet;
 	
 	void Start() {
 		this.inputHelper = new InputHelper();
@@ -64,11 +77,36 @@ public class Player : MonoBehaviour {
 	
 	void Update() {
 		this.inputHelper.Update();
+		if (this.pauseEvent != null) {
+			if (!this.pauseEvent.IsTexting) {
+				this.pauseEvent.IsTexting = true;
+			} else if (Input.GetButtonDown("Event")) {
+				this.pauseEvent.Next();
+				//If end of text, then stop
+				if (!this.pauseEvent.IsTexting) {
+					this.pauseEvent = null;
+				}
+			} 
+			return;
+		}
+		
 		this.wallStickTimer.Update();
 		Vector2 input = new Vector2 (Input.GetAxisRaw ("Horizontal"), Input.GetAxisRaw ("Vertical"));
+		if (input.x < 0) {
+			this.isFacingLeft = true;
+		} else if (input.x > 0) {
+			this.isFacingLeft = false;
+		}
 		
+		if (Input.GetButtonDown("Fire1")) {
+			GameObject bullet = Instantiate(mindBullet, transform.position, Quaternion.identity) as GameObject;
+			bullet.GetComponent<MindBullet>().Dir = (this.isFacingLeft) ? -1 : 1;
+		}
+		float targetAccelTime;
 		//Handles Ground Speeds
 		if (this.controller.CollInfo.isBelow) {
+			this.lState = LocationState.GROUNDED;
+			targetAccelTime = this.accelTimeGrounded;
 			if (Input.GetButton("Sprint")) {
 				this.targetSpeed = this.sprintSpeed;
 				this.aState = ActionState.SPRINTING;
@@ -80,18 +118,14 @@ public class Player : MonoBehaviour {
 				this.targetSpeed = this.walkSpeed;
 				this.aState = ActionState.IDLE;
 			}
-		}
-		//Allows for more gradual changes in velocity
-		//Add more for additional types of surfaces
-		float targetAccelTime;
-		if (this.controller.CollInfo.isBelow) {
-			targetAccelTime = this.accelTimeGrounded;
 		} else {
+			this.lState = LocationState.AIRBOURNE;
 			targetAccelTime = this.accelTimeAirbourne;
 		}
+
 		
 		float targetVelocityX = input.x * this.targetSpeed;
-		velocityVect.x = Mathf.SmoothDamp (velocityVect.x, targetVelocityX, ref velocityXSmoothing, targetAccelTime);
+		this.velocityVect.x = Mathf.SmoothDamp (this.velocityVect.x, targetVelocityX, ref velocityXSmoothing, targetAccelTime);
 		
 		bool isWallSliding = false;
 		int wallDirX = (this.controller.CollInfo.isLeft) ? -1 : 1;
@@ -144,14 +178,15 @@ public class Player : MonoBehaviour {
 				this.hasDoubleJump = false;
 			}
 		}
+		
+		//Handles if player releases jump button early
+		//Will shorten jump
 		if (Input.GetButtonUp("Jump")) {
-			//Handles if player releases jump button early
-			//Will shortent jump
 			if (this.velocityVect.y > this.minJumpVelocity && this.hasDoubleJump) {
 				this.velocityVect.y = this.minJumpVelocity;
 			}
 		}
-		
+		//If airborne and falling
 		if (!this.controller.CollInfo.isBelow && Mathf.Sign(this.velocityVect.y) == -1) {
 			this.aState = ActionState.FALLING;
 		}
@@ -164,25 +199,16 @@ public class Player : MonoBehaviour {
 			this.velocityVect.y = 0;
 			this.hasDoubleJump = this.controller.CollInfo.isBelow;
 		}
-		
-		if (this.isInEventRange && Input.GetButtonDown("Event")) {
-			this.test.IsSpeaking = true;
-		}
 	}
-	private EventNPCSpeech test;
-	#region Collider Messages
-	void OnTriggerEnter2D(Collider2D coll) {
-		if (coll.tag.Equals("Event")){
-			this.isInEventRange = true;
-			print("yes");
-			this.test = coll.GetComponent<EventNPCSpeech>();
-		}
-	}
-	
-	void OnTriggerExit2D(Collider2D other) {
-		if (other.tag.Equals("Event")) {
-			this.isInEventRange = false;
-		}
+	#region - On Collision
+	void OnTriggerStay2D(Collider2D coll) {
+		if (Input.GetButtonDown("Event")) {
+			if (coll.tag.Equals("PauseEvent") && this.pauseEvent == null){
+				this.pauseEvent = coll.GetComponent<EventNPCSpeech>();
+			} else if (coll.tag.Equals("NoPauseEvents")) {
+				
+			}
+		}		
 	}
 	#endregion
 }

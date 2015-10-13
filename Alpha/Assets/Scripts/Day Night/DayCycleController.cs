@@ -31,7 +31,11 @@ public class DayCycleController : MonoBehaviour {
 	private Dictionary<int, State> hourStates;
 	private Dictionary<State, int> stateHours;
 	
+	private PercipitationController percipitationController;
+	private bool didChangePercipitationState;
+	
 	private Timer timer;
+	
 	
 	// Use this for initialization
 	void Start () {
@@ -48,7 +52,11 @@ public class DayCycleController : MonoBehaviour {
 		}
 		
 		this.timer = new Timer();
+		
+		this.percipitationController = GameObject.FindGameObjectWithTag("WeatherManager").transform.GetChild(0).GetComponent<PercipitationController>();
+		
 		this.timer.Start();
+		
 	}
 	
 	// Update is called once per frame
@@ -62,6 +70,16 @@ public class DayCycleController : MonoBehaviour {
 			this.timer.Reset();
 		}
 		this.currentHour %= this.hoursCount;
+		//Set/Reset all necessary day-related things here
+		if (this.currentHour == 0 && !this.didChangePercipitationState) {
+			int bucket = Random.Range(0 ,this.percipitationController.RNGBuckets.Length);
+			this.percipitationController.SetMagnitudeFromBucket(bucket);
+			this.didChangePercipitationState = true;
+			print("Did Change with choice: " + this.percipitationController.magnitude);
+		} else if (this.currentHour != 0 && this.didChangePercipitationState){
+			this.didChangePercipitationState = false;
+			print ("Stable");
+		}
 		State tempState;
 		//Update current state
 		if (this.hourStates.TryGetValue(this.currentHour, out tempState)) {

@@ -8,7 +8,11 @@ TagManager:
   - DayNightManager
   - PassThrough
   - NightLight
-  - Event
+  - NoPauseEvent
+  - PauseEvent
+  - MindBullet
+  - Cogniscent
+  - WeatherManager
   layers:
   - Default
   - TransparentFX

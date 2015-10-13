@@ -1,0 +1,385 @@
+fileFormatVersion: 2
+guid: d86b119f81365974ca5e373fa7c155ed
+timeCreated: 1444706618
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Grass_Patch_2_Slight_Wind_#[150,150]_0
+    21300002: Grass_Patch_2_Slight_Wind_#[150,150]_1
+    21300004: Grass_Patch_2_Slight_Wind_#[150,150]_2
+    21300006: Grass_Patch_2_Slight_Wind_#[150,150]_3
+    21300008: Grass_Patch_2_Slight_Wind_#[150,150]_4
+    21300010: Grass_Patch_2_Slight_Wind_#[150,150]_5
+    21300012: Grass_Patch_2_Slight_Wind_#[150,150]_6
+    21300014: Grass_Patch_2_Slight_Wind_#[150,150]_7
+    21300016: Grass_Patch_2_Slight_Wind_#[150,150]_8
+    21300018: Grass_Patch_2_Slight_Wind_#[150,150]_9
+    21300020: Grass_Patch_2_Slight_Wind_#[150,150]_10
+    21300022: Grass_Patch_2_Slight_Wind_#[150,150]_11
+    21300024: Grass_Patch_2_Slight_Wind_#[150,150]_12
+    21300026: Grass_Patch_2_Slight_Wind_#[150,150]_13
+    21300028: Grass_Patch_2_Slight_Wind_#[150,150]_14
+    21300030: Grass_Patch_2_Slight_Wind_#[150,150]_15
+    21300032: Grass_Patch_2_Slight_Wind_#[150,150]_16
+    21300034: Grass_Patch_2_Slight_Wind_#[150,150]_17
+    21300036: Grass_Patch_2_Slight_Wind_#[150,150]_18
+    21300038: Grass_Patch_2_Slight_Wind_#[150,150]_19
+    21300040: Grass_Patch_2_Slight_Wind_#[150,150]_20
+    21300042: Grass_Patch_2_Slight_Wind_#[150,150]_21
+    21300044: Grass_Patch_2_Slight_Wind_#[150,150]_22
+    21300046: Grass_Patch_2_Slight_Wind_#[150,150]_23
+    21300048: Grass_Patch_2_Slight_Wind_#[150,150]_24
+    21300050: Grass_Patch_2_Slight_Wind_#[150,150]_25
+    21300052: Grass_Patch_2_Slight_Wind_#[150,150]_26
+    21300054: Grass_Patch_2_Slight_Wind_#[150,150]_27
+    21300056: Grass_Patch_2_Slight_Wind_#[150,150]_28
+    21300058: Grass_Patch_2_Slight_Wind_#[150,150]_29
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -2
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 750
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_1
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 750
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_2
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 750
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_3
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 750
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_4
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 750
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 600
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_6
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 600
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_7
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 600
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_8
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 600
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_9
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 600
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 450
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_11
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 450
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_12
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 450
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_13
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 450
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_14
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 450
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 300
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_16
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 300
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_17
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 300
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_18
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 300
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_19
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 300
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 150
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_21
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 150
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_22
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 150
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_23
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 150
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_24
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 150
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_25
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_26
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 0
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_27
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 0
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_28
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 0
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Grass_Patch_2_Slight_Wind_#[150,150]_29
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 0
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

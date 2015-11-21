@@ -3,21 +3,78 @@ using System.Collections;
 
 public class HTGrassController : MonoBehaviour {
 	private Animator animator;
+	public LayerMask windLayer;
+	
+	//Holds information for staggered start
+	public struct AsynchStartState {
+		private int newState;
+		public int NewState {
+			get { return this.newState; }
+			set { this.newState = value; }
+		}
+		
+		private HTTimer timer;
+		public HTTimer Timer {
+			get {
+				if (this.timer == null) {
+					this.timer = new HTTimer();
+				} 
+				return this.timer; 
+			}
+			set { this.timer = value; }
+		}
+		
+		private float staggerSeconds;
+		public float StaggerSeconds {
+			get { return this.staggerSeconds; }
+			set { this.staggerSeconds = value; }
+		}
+		
+		public void Init (int newState, float staggerSeconds) {
+			this.staggerSeconds = staggerSeconds;
+			this.newState = newState;
+			this.Timer.Start();
+		}
+	}
+	private AsynchStartState asynchStartState;
 	// Use this for initialization
 	void Start () {
 		this.animator = transform.GetComponent<Animator>();
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		if (Input.GetKeyDown("1")) {
-			this.animator.SetInteger("Wind State", 0);
-		} else if (Input.GetKeyDown("2")) {
-			this.animator.SetInteger("Wind State", 1);
-		} else if (Input.GetKeyDown("3")) {
-			this.animator.SetInteger("Wind State", 2);
-		} else if (Input.GetKeyDown("4")) {
-			this.animator.SetInteger("Wind State", 3);
+	void Update() {
+		if (this.asynchStartState.Timer.IsTiming) {
+			this.asynchStartState.Timer.Update();
+			if (this.asynchStartState.Timer.Seconds >= this.asynchStartState.StaggerSeconds) {
+				this.SetWindState(this.asynchStartState.NewState);
+			}
 		}
+	}
+	
+	void OnTriggerEnter2D (Collider2D collider) {
+		//Override collision handling if still in stagger state
+		if (this.asynchStartState.Timer.IsTiming) {
+			return;
+		}
+		if (HTUnityComponentsHelper.IsInLayerMask(collider.gameObject, this.windLayer)) {
+			Vector2 distanceVect = collider.transform.position - transform.position;
+			if (distanceVect.x >= 0) {
+				this.animator.SetTrigger(HTAnimatorParamsConstants.WindSingleSlightForward);
+			} else {
+				this.animator.SetTrigger(HTAnimatorParamsConstants.WindSingleSlightBackward);
+			} 
+		}
+	}
+	
+	public void SetWindState(int state) {
+		this.animator.SetInteger(HTAnimatorParamsConstants.WindStateParam, state);
+	}
+	
+	public void SetWindStateAsynch(int state, float staggerSeconds) {
+		this.asynchStartState.Init(state, staggerSeconds);
+	}
+	
+	public void SetWindTrigger(string param) {
+		this.animator.SetTrigger(param);
 	}
 }

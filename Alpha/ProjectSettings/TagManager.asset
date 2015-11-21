@@ -13,6 +13,7 @@ TagManager:
   - MindBullet
   - Cogniscent
   - WeatherManager
+  - Grass
   layers:
   - Default
   - TransparentFX
@@ -24,7 +25,7 @@ TagManager:
   - 
   - Collisions
   - Player
-  - 
+  - Wind
   - 
   - 
   - 

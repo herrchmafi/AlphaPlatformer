@@ -22,7 +22,7 @@ public class HTSunMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		float targetHour = (this.dayCycleController.currentHour + this.hourOffset) % this.dayCycleController.hoursCount;
-		float thetaRadians = (targetHour + this.dayCycleController.HourTimeDec) / this.dayCycleController.hoursCount * HTConstants.radiansPerRevolution;
+		float thetaRadians = (targetHour + this.dayCycleController.HourTimeDec) / this.dayCycleController.hoursCount * HTMathConstants.radiansPerRevolution;
 		float x = this.pivotPoint.x + -this.radius * Mathf.Cos(thetaRadians);
 		float y = this.pivotPoint.y + this.radius * Mathf.Sin(thetaRadians);
 		transform.position = new Vector2(x, y);

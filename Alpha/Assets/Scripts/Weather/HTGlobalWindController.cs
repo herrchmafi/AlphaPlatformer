@@ -25,9 +25,7 @@ public class HTGlobalWindController : MonoBehaviour {
 	}
 	
 	void Update() {
-		if (Input.GetKeyDown("1")) {
-			this.SetAsynchWindState(HTAnimatorParamsConstants.WindStateSlight);
-		} 
+
 	}
 	
 	public void SetSyncWindState(int state) {

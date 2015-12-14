@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HTGrassController : MonoBehaviour {
+public class HTWindableController : MonoBehaviour {
 	private Animator animator;
 	public LayerMask windLayer;
 	
@@ -58,11 +58,22 @@ public class HTGrassController : MonoBehaviour {
 		}
 		if (HTUnityComponentsHelper.IsInLayerMask(collider.gameObject, this.windLayer)) {
 			Vector2 distanceVect = collider.transform.position - transform.position;
-			if (distanceVect.x >= 0) {
-				this.animator.SetTrigger(HTAnimatorParamsConstants.WindSingleSlightForward);
-			} else {
-				this.animator.SetTrigger(HTAnimatorParamsConstants.WindSingleSlightBackward);
-			} 
+			HTWindStrength windStrength = collider.gameObject.GetComponent<HTWindStrength>();
+			switch (windStrength.strength) {
+				case HTWindStrength.WindStrength.SLIGHT:
+					if (distanceVect.x >= 0) {
+						this.animator.SetTrigger(HTAnimatorParamsConstants.WindSingleSlightForward);
+					} else {
+						this.animator.SetTrigger(HTAnimatorParamsConstants.WindSingleSlightBackward);
+					} 
+					break;
+				case HTWindStrength.WindStrength.STRONG:
+					break;
+				case HTWindStrength.WindStrength.BLUSTERY:
+					break;
+				default:
+					break;
+			}
 		}
 	}
 	

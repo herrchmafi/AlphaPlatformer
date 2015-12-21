@@ -27,6 +27,4 @@ public class HTSunMovement : MonoBehaviour {
 		float y = this.pivotPoint.y + this.radius * Mathf.Sin(thetaRadians);
 		transform.position = new Vector2(x, y);
 	}
-	
-
 }

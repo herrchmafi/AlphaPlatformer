@@ -30,8 +30,16 @@ public class HTWindPath {
 	private float frequency;
 	
 	//Used for loop motion
-	private Vector2 initialAngle;
-
+	
+	private Vector2 initialPoint = HTMathConstants.nullPoint;
+	public Vector2 InitialPoint {
+		get { return this.initialPoint; }
+		set { this.initialPoint = value; }
+	}
+	private float radius;
+	private bool isBottom;
+	//This will be calculated based off current position
+	
 	public Vector2 Translate(float deltaSeconds, float seconds) {
 		switch (this.path) {
 			case HTWindPath.WindPath.STRAIGHT:
@@ -40,24 +48,23 @@ public class HTWindPath {
 				return new Vector2(this.dir * this.speed * deltaSeconds, 
 			                   this.amplitude * Mathf.Sin(this.frequency * HTMathConstants.radian * seconds) * deltaSeconds);
 			case HTWindPath.WindPath.LOOP:
-				//Do nothing
-				break;
+				if (this.initialPoint == HTMathConstants.nullPoint) { throw new System.InvalidOperationException("Did not set initial point for loop path"); }
+				return HTMotionHelper.CircularMotion(this.isBottom, seconds / this.secondsDuration, this.radius, this.initialPoint);
 		}
 		return Vector3.zero;
 	}
 	
 	//WTF Naming
-	public float EulerAngulate(float seconds) {
+	public Vector3 EulerAngulate(float seconds) {
 		switch (this.path) {
 		case HTWindPath.WindPath.STRAIGHT:
-			return this.angle;
-		case HTWindPath.WindPath.SINE:
-			return Vector2.zero;
-		case HTWindPath.WindPath.LOOP:
-			float u = seconds / this.secondsDuration;
-			if (u >= 1.0f) { u = 1.0f; }
-			return Mathf.MoveTowardsAngle(this.initialAngle, this.initialAngle + HTMathConstants.degreesPerRevolution, u);
+				return this.angle;
+			case HTWindPath.WindPath.SINE:
+				return Vector2.zero;
+			case HTWindPath.WindPath.LOOP:
+				return Vector2.zero;
 		}
+		return Vector3.zero;
 	}
 	
 	//For straight paths
@@ -80,11 +87,22 @@ public class HTWindPath {
 	}
 	
 	//For circular paths
-	public HTWindPath(int dir, float seconds, Vector2 initialAngle) {
+	public HTWindPath(int dir, float seconds, float radius, bool isBottom) {
 		this.path = WindPath.LOOP;
 		this.dir = dir;
 		this.speed = speed;
 		this.secondsDuration = seconds;
-		this.initialAngle = initialAngle;
+		this.radius = radius;
+		this.isBottom = isBottom;
+	}
+	
+	public HTWindPath(int dir, float seconds, float radius, bool isBottom, Vector2 initialPoint) {
+		this.path = WindPath.LOOP;
+		this.dir = dir;
+		this.speed = speed;
+		this.secondsDuration = seconds;
+		this.radius = radius;
+		this.isBottom = isBottom;
+		this.initialPoint = initialPoint;
 	}
 }

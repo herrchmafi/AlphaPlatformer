@@ -67,9 +67,10 @@ public class HTWindEmitter : MonoBehaviour {
 	private void EmitWindBlock() {
 		Transform windBlockTransform = (Transform)Instantiate(this.windBlockFab, transform.position, transform.rotation);
 		HTWindPath[] windPaths = new HTWindPath[] {
-			new HTWindPath(this.dir, this.windSpeed, 5.0f, 10.0f, 0.05f)
+//			new HTWindPath(this.dir, this.windSpeed, 5.0f, 10.0f, 0.05f)
+			new HTWindPath(this.dir, 5.0f, 3.0f, false, transform.position)
 		};
-		windBlockTransform.gameObject.GetComponent<HTWindTriggerBlock>().Init(windPaths, transform.localScale.y);
+		windBlockTransform.gameObject.GetComponent<HTWindPathController>().Init(windPaths, transform.localScale.y);
 	}
 	
 	public void Stop() {

@@ -25,7 +25,7 @@ public class HTWindEmitter : MonoBehaviour {
 		if (Input.GetKeyDown("1")) {
 			this.StartEmissionsWithRandomWait(3.0f, 10.0f);
 		} else if (Input.GetKeyDown("2")) {
-			this.StartEmissionsWithRandomWait(1.0f, 4.0f);
+			this.Stop();
 		} else if (Input.GetKeyDown("3")) {
 			this.Stop();
 		}
@@ -62,13 +62,21 @@ public class HTWindEmitter : MonoBehaviour {
 		this.isEmmisionsRandomized = true;
 		this.timer.Start();
 	}
-	
+
+//	//For straight paths
+//	public HTWindPath(int dir, float speed, float seconds, Vector2 angle)
+//
+//	//For sine paths
+//	public HTWindPath(int dir, float speed, float seconds, float amplitude, float frequency)
+//	
+//	//For circular paths
+//	public HTWindPath(int dir, float speed, float seconds, float changeDegrees) 
+
 	
 	private void EmitWindBlock() {
 		Transform windBlockTransform = (Transform)Instantiate(this.windBlockFab, transform.position, transform.rotation);
 		HTWindPath[] windPaths = new HTWindPath[] {
-//			new HTWindPath(this.dir, this.windSpeed, 5.0f, 10.0f, 0.05f)
-			new HTWindPath(this.dir, 5.0f, 3.0f, false, transform.position)
+			new HTWindPath(this.dir, 3.0f, 100.0f, 40.0f)
 		};
 		windBlockTransform.gameObject.GetComponent<HTWindPathController>().Init(windPaths, transform.localScale.y);
 	}

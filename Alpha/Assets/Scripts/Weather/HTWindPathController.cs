@@ -18,7 +18,7 @@ public class HTWindPathController : MonoBehaviour {
 		if (this.timer != null && this.timer.IsTiming) {
 			this.timer.Update();
 			HTWindPath path = this.windPaths[this.windIndex];
-			if (this.timer.Seconds >= path.Seconds) {
+			if (this.timer.Seconds >= path.SecondsDuration) {
 				this.timer.Reset();
 				this.windIndex++;
 				if (this.windIndex >= this.windPaths.Length) {
@@ -28,20 +28,19 @@ public class HTWindPathController : MonoBehaviour {
 					return;
 				}
 				path = this.windPaths[this.windIndex];
-				if (path.Path == HTWindPath.WindPath.LOOP) {
-					path.InitialPoint = transform.position;
-					print(path.InitialPoint);
-				}
+				path.InitialEulerAngle = transform.eulerAngles;
 			}
-			transform.Translate(path.Translate(Time.deltaTime, this.timer.Seconds));
-			transform.eulerAngles = path.EulerAngulate(this.timer.Seconds);
+			transform.eulerAngles = path.EulerAngulate(Time.deltaTime);
 		}
 	}
-	
+
 	public void Init (HTWindPath[] windPaths, float heightScale) {
 		this.windPaths = windPaths;
-		if (this.windPaths.Length == 0) { return; }
+		if (this.windPaths.Length == 0) {
+			return;
+		}
 		this.windPaths = windPaths;
+		this.windPaths[0].InitialEulerAngle = transform.eulerAngles;
 		transform.localScale = new Vector2(transform.localScale.x, heightScale);
 		this.timer = new HTTimer();
 		this.timer.Start();

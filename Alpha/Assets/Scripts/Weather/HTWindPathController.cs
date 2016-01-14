@@ -8,9 +8,11 @@ public class HTWindPathController : MonoBehaviour {
 	
 	public float fadeoutTime;
 	
+	private Vector2 auxEulerVect;
+	
 	// Use this for initializations
 	void Start () {
-
+		this.auxEulerVect = transform.eulerAngles;
 	}
 	
 	// Update is called once per frame
@@ -30,7 +32,8 @@ public class HTWindPathController : MonoBehaviour {
 				path = this.windPaths[this.windIndex];
 				path.InitialEulerAngle = transform.eulerAngles;
 			}
-			transform.eulerAngles = path.EulerAngulate(Time.deltaTime);
+			this.auxEulerVect = path.EulerAngulate(Time.deltaTime);
+			transform.Translate(path.Translate(transform.position, Time.deltaTime, this.auxEulerVect));
 		}
 	}
 

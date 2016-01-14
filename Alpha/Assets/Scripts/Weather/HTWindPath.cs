@@ -25,6 +25,9 @@ public class HTWindPath {
 
 	private float seconds = 0.0f;
 	private Vector2 currentEulerAngle;
+	public Vector2 CurrentEulerAngle {
+		get { return this.currentEulerAngle; }
+	}
 	
 	//Used for sine motion
 	private float amplitude;
@@ -43,10 +46,12 @@ public class HTWindPath {
 			this.currentEulerAngle = this.initialEulerAngle; 
 		}
 	}
-
+	
+	//Will give final translation based off of current angle and movement
+	//Sign is dependent on what the angle is
 	public Vector3 Translate(Vector2 currentPos, float deltaSeconds, Vector2 eulerAngles) {
-		Vector2 deltaMovement = this.dir * HTMathHelper.NormalizedVectFromRadians(HTMathHelper.DegreesToRadians(eulerAngles.y)) * this.speed * deltaSeconds;
-		return deltaMovement;
+		Vector2 tempMovement = HTMathHelper.NormalizedVectFromRadians(HTMathHelper.DegreesToRadians(eulerAngles.y)) * this.speed * deltaSeconds;
+		return new Vector2(tempMovement.x, tempMovement.y);
 	}
 	
 	//WTF Naming

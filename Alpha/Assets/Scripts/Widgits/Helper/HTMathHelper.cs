@@ -15,4 +15,12 @@ public class HTMathHelper {
 	public static Vector2 NonNormalizedVectFromRadians(float radians) {
 		return new Vector2(1, Mathf.Tan (radians));
 	}
+	
+	public static float NormalizeAngle(float angle) {
+		if (angle < .0f) {
+			angle = angle + HTMathConstants.degreesPerRevolution;
+		}
+		angle %= HTMathConstants.degreesPerRevolution;
+		return angle;
+	}
 }

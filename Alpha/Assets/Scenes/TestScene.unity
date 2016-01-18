@@ -474,7 +474,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   windBlockFab: {fileID: 471402, guid: cd070b47739dd11469261dab3fa4bd8a, type: 2}
-  windSpeed: 3
+  windSpeed: 2
   windBlockDuration: 3
   dir: 1
 --- !u!1 &337387874

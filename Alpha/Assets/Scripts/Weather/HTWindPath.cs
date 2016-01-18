@@ -3,7 +3,6 @@ using System.Collections;
 
 public class HTWindPath {
 	public static Vector2 forward = Vector2.right;
-	public const float maxAngle = 30.0f;
 	
 	public enum WindPath {
 		STRAIGHT, LOOP, SINE
@@ -17,13 +16,15 @@ public class HTWindPath {
 
 	private int dir;		
 	private float speed;
+	private float seconds = .0f;
+	public float Seconds {
+		get { return this.seconds; }
+	}
 
 	private float secondsDuration;
 	public float SecondsDuration {
 		get { return this.secondsDuration; }
 	}
-
-	private float seconds = 0.0f;
 	private Vector2 currentEulerAngle;
 	public Vector2 CurrentEulerAngle {
 		get { return this.currentEulerAngle; }
@@ -31,19 +32,45 @@ public class HTWindPath {
 	
 	//Used for sine motion
 	private float amplitude;
+	
 	private float frequency;
+	public float Frequency {
+		get { return this.frequency; }
+	}
 	
 	//Used for loop motion
 	private float changeDegrees;
 	public float ChangeDegrees {
 		get { return this.changeDegrees; }
 	}
+	
+	private int revolutions;
 
-	private Vector2 initialEulerAngle = HTMathConstants.nullPoint;
+	private Vector2 initialEulerAngle = Vector2.zero;
 	public Vector2 InitialEulerAngle {
-		set { 
-			this.initialEulerAngle = value;
-			this.currentEulerAngle = this.initialEulerAngle; 
+		get { return this.initialEulerAngle; }
+		set { this.initialEulerAngle = value; }
+	}
+	
+	private Vector2 initialPos = Vector2.zero;
+	public Vector2 InitialPos {
+		get { return this.initialPos; }
+	}
+	
+	public void Setup(Vector2 initialEulerAngle, Vector2 initialPos) {
+		this.initialEulerAngle = initialEulerAngle;
+		this.currentEulerAngle = this.initialEulerAngle;
+		this.initialPos = initialPos;
+		switch (this.path) {
+		case WindPath.LOOP:
+			float normalizedInitialDegrees = HTMathHelper.NormalizeAngle(this.initialEulerAngle.y);
+			float lowerAngleBound = HTMathHelper.NormalizeAngle(-30.0f);
+			float totalRevolutionDegrees = (normalizedInitialDegrees >= lowerAngleBound) ?
+				normalizedInitialDegrees - lowerAngleBound + HTMathConstants.degreesPerRevolution 
+					: lowerAngleBound - normalizedInitialDegrees;
+			totalRevolutionDegrees += (this.revolutions - 1) * HTMathConstants.degreesPerRevolution;
+			this.secondsDuration = totalRevolutionDegrees / this.changeDegrees;
+			break;
 		}
 	}
 	
@@ -51,12 +78,13 @@ public class HTWindPath {
 	//Sign is dependent on what the angle is
 	public Vector3 Translate(Vector2 currentPos, float deltaSeconds, Vector2 eulerAngles) {
 		Vector2 tempMovement = HTMathHelper.NormalizedVectFromRadians(HTMathHelper.DegreesToRadians(eulerAngles.y)) * this.speed * deltaSeconds;
-		return new Vector2(tempMovement.x, tempMovement.y);
+		return currentPos + new Vector2(tempMovement.x, tempMovement.y);
 	}
 	
 	//WTF Naming
 	public Vector2 EulerAngulate(float deltaSeconds) {
 		Vector2 angle = HTMathConstants.nullPoint;
+		this.seconds += deltaSeconds;
 		switch (this.path) {
 			case HTWindPath.WindPath.STRAIGHT:
 				angle = this.targetAngle;
@@ -69,7 +97,6 @@ public class HTWindPath {
 				break;
 		}
 		this.currentEulerAngle = angle;
-		this.seconds += deltaSeconds;
 		return angle;
 	}
 	
@@ -93,11 +120,11 @@ public class HTWindPath {
 	}
 	
 	//For circular paths
-		public HTWindPath(int dir, float speed, float seconds, float changeDegrees) {
+	public HTWindPath(int dir, float speed, int revolutions, float changeDegrees) {
 		this.path = WindPath.LOOP;
 		this.dir = dir;
 		this.speed = speed;
-		this.secondsDuration = seconds;
+		this.revolutions = revolutions;
 		this.changeDegrees = changeDegrees;
 	}
 }

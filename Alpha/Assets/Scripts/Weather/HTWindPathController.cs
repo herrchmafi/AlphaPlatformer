@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class HTWindPathController : MonoBehaviour {
-	private HTWindPath[] windPaths;
+	private List<HTWindPath> windPaths;
 	private int windIndex;
 	private HTTimer timer;
 	
@@ -23,30 +24,30 @@ public class HTWindPathController : MonoBehaviour {
 			if (this.timer.Seconds >= path.SecondsDuration) {
 				this.timer.Reset();
 				this.windIndex++;
-				if (this.windIndex >= this.windPaths.Length) {
+				if (this.windIndex >= this.windPaths.Count) {
 					this.timer.Stop();
 					//TODO: Use coroutine
 					Destroy(gameObject);
 					return;
 				}
 				path = this.windPaths[this.windIndex];
-				path.InitialEulerAngle = transform.eulerAngles;
+				path.Setup(this.auxEulerVect, transform.position);
 			}
 			this.auxEulerVect = path.EulerAngulate(Time.deltaTime);
-			transform.Translate(path.Translate(transform.position, Time.deltaTime, this.auxEulerVect));
+			transform.position = path.Translate(transform.position, Time.deltaTime, this.auxEulerVect);
 		}
 	}
-
-	public void Init (HTWindPath[] windPaths, float heightScale) {
+	//Use if durations are known
+	public void Init (List<HTWindPath> windPaths, float heightScale) {
 		this.windPaths = windPaths;
-		if (this.windPaths.Length == 0) {
+		if (this.windPaths.Count == 0) {
 			return;
 		}
 		this.windPaths = windPaths;
-		this.windPaths[0].InitialEulerAngle = transform.eulerAngles;
+		this.windPaths[0].Setup(transform.eulerAngles, transform.position);
+
 		transform.localScale = new Vector2(transform.localScale.x, heightScale);
 		this.timer = new HTTimer();
 		this.timer.Start();
 	}
-	
 }

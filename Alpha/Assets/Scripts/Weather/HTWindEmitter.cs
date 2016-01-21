@@ -71,13 +71,13 @@ public class HTWindEmitter : MonoBehaviour {
 //	public HTWindPath(int dir, float speed, float seconds, float amplitude, float frequency)
 //	
 //	//For circular paths
-//	public HTWindPath(int dir, float speed, int revolu, float changeDegrees) 
+//	public HTWindPath(int dir, float speed, int revolutions, float radius)
 
 	
 	private void EmitWindBlock() {
 		Transform windBlockTransform = (Transform)Instantiate(this.windBlockFab, transform.position, transform.rotation);
 		List<HTWindPath> windPaths = new List<HTWindPath> {
-			new HTWindPath(this.dir, this.windSpeed, 5.0f, 100.0f, 20.0f),
+			new HTWindPath(this.dir, this.windSpeed, 5.0f, 10.0f, 1.0f),
 			new HTWindPath(this.dir, this.windSpeed, 2, 100.0f)
 		};
 		windBlockTransform.gameObject.GetComponent<HTWindPathController>().Init(windPaths, transform.localScale.y);

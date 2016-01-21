@@ -23,4 +23,12 @@ public class HTMathHelper {
 		angle %= HTMathConstants.degreesPerRevolution;
 		return angle;
 	}
+
+	public static float Circumference(float radius) {
+		return 2 * Mathf.PI * radius;
+	}
+
+	public static float CircleArea(float radius) {
+		return Mathf.Pow(Mathf.PI * radius, 2);
+	}
 }

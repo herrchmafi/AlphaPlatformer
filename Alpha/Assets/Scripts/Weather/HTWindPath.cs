@@ -1,21 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class HTWindPath {
 	public static Vector2 forward = Vector2.right;
-	
-	public enum WindPath {
-		STRAIGHT, LOOP, WAVE
-	}
-	private WindPath path;
-	public WindPath Path {
+
+	private HTWindPathHelper.WindPath path;
+	public HTWindPathHelper.WindPath WindPath {
 		get { return this.path; }
 	}
 	
 	private Vector2 targetAngle;
 
-	private int dir;		
+	private int dir;	
+	public int Dir {
+		get { return this.dir; }
+	}	
 	private float speed;
+	public float Speed {
+		get { return this.speed; }
+	}
 	private float seconds = .0f;
 	public float Seconds {
 		get { return this.seconds; }
@@ -43,8 +47,6 @@ public class HTWindPath {
 	public float ChangeDegrees {
 		get { return this.changeDegrees; }
 	}
-	
-	private int revolutions;
 
 	private Vector2 initialEulerAngle = Vector2.zero;
 	public Vector2 InitialEulerAngle {
@@ -62,14 +64,13 @@ public class HTWindPath {
 		this.currentEulerAngle = this.initialEulerAngle;
 		this.initialPos = initialPos;
 		switch (this.path) {
-		case WindPath.LOOP:
+		case HTWindPathHelper.WindPath.LOOP:
 			float normalizedInitialDegrees = HTMathHelper.NormalizeAngle(this.initialEulerAngle.y);
 			//We want something that resembles a circular motion no matter what the angle it's coming from
 			float lowerAngleBound = HTMathHelper.NormalizeAngle(-30.0f);
 			float totalRevolutionDegrees = (normalizedInitialDegrees >= lowerAngleBound) ?
 				normalizedInitialDegrees - lowerAngleBound + HTMathConstants.degreesPerRevolution 
 					: lowerAngleBound - normalizedInitialDegrees;
-			totalRevolutionDegrees += (this.revolutions - 1) * HTMathConstants.degreesPerRevolution;
 			this.secondsDuration = totalRevolutionDegrees / this.changeDegrees;
 			break;
 		}
@@ -80,15 +81,15 @@ public class HTWindPath {
 	public Vector3 Translate(Vector2 currentPos, float deltaSeconds, Vector2 eulerAngles) {
 		Vector2 tempMovement = HTMathHelper.NormalizedVectFromRadians(HTMathHelper.DegreesToRadians(eulerAngles.y)) * this.speed * deltaSeconds;;
 		switch (this.path) {
-		case WindPath.STRAIGHT:
+		case HTWindPathHelper.WindPath.STRAIGHT:
 			break;
-		case WindPath.WAVE:
+		case HTWindPathHelper.WindPath.WAVE:
 			tempMovement = new Vector2(tempMovement.x, this.amplitude * tempMovement.y);
 			break;
-		case WindPath.LOOP:
+		case HTWindPathHelper.WindPath.LOOP:
 			break;
 		}
-		return currentPos + this.dir * new Vector2(tempMovement.x, tempMovement.y);
+		return currentPos + new Vector2(this.dir * tempMovement.x, tempMovement.y);
 	}
 	
 	//WTF Naming
@@ -96,13 +97,13 @@ public class HTWindPath {
 		Vector2 angle = HTMathConstants.nullPoint;
 		this.seconds += deltaSeconds;
 		switch (this.path) {
-		case WindPath.STRAIGHT:
+		case HTWindPathHelper.WindPath.STRAIGHT:
 			angle = this.targetAngle;
 			break;
-		case WindPath.WAVE:
+		case HTWindPathHelper.WindPath.WAVE:
 			angle = this.initialEulerAngle + new Vector2(.0f, Mathf.Cos(HTMathConstants.radiansPerRevolution * this.frequency * this.seconds));
 			break;
-		case WindPath.LOOP:
+		case HTWindPathHelper.WindPath.LOOP:
 			angle = this.currentEulerAngle + new Vector2(.0f, this.changeDegrees * deltaSeconds);
 			break;
 		}
@@ -112,7 +113,7 @@ public class HTWindPath {
 	
 	//For straight paths
 	public HTWindPath(int dir, float speed, float seconds, Vector2 angle) {
-		this.path = WindPath.STRAIGHT;
+		this.path = HTWindPathHelper.WindPath.STRAIGHT;
 		this.dir = dir;
 		this.speed = speed;
 		this.secondsDuration = seconds;
@@ -122,7 +123,7 @@ public class HTWindPath {
 	//For wave paths
 	//Amplitude is the height of the wave. Frequency is the number of periods completed per second
 	public HTWindPath(int dir, float speed, float seconds, float amplitude, float frequency) {
-		this.path = WindPath.WAVE;
+		this.path = HTWindPathHelper.WindPath.WAVE;
 		this.dir = dir;
 		this.speed = speed;
 		this.secondsDuration = seconds;
@@ -131,11 +132,10 @@ public class HTWindPath {
 	}
 	
 	//For circular paths
-	public HTWindPath(int dir, float speed, int revolutions, float radius) {
-		this.path = WindPath.LOOP;
+	public HTWindPath(int dir, float speed, float radius) {
+		this.path = HTWindPathHelper.WindPath.LOOP;
 		this.dir = dir;
 		this.speed = speed;
-		this.revolutions = revolutions;
 		this.changeDegrees = HTMathConstants.degreesPerRevolution / radius;
 	}
 }

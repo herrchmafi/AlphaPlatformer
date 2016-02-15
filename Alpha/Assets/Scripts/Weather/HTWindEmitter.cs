@@ -4,19 +4,36 @@ using System.Collections.Generic;
 
 public class HTWindEmitter : MonoBehaviour {
 	public Transform windBlockFab;
-	
-	public float windSpeed;
-	public float windBlockDuration;
-	
+
 	public int dir;
-	
-	private float secondsToNextWindBlock;
-	
+
+	//Shared
+	public float minWindSpeed, maxWindSpeed;
+	public float windBlockColliderYScale;
+	public float windBlockScale;
+
+	//Straight
+	public float absoluteMaxAngle;
+
+	//For wavy path 
+	public float amplitude;
+	public float frequency;
+
+	//Straight and wavy
+	public float minDurationSeconds, maxDurationSeconds;
+
+	//For circular path
+	public float radius;
+
 	private HTTimer timer;
 	
-	private float emitWaitSecondsMin, emitWaitSecondsMax;
+	public float emitWaitSecondsMin, emitWaitSecondsMax;
 	private bool isEmmisionsRandomized;
-	// Use this for initialization
+	
+	private float secondsToNextWindBlock;
+
+	public HTWindPathHelper.WindPathTemplate template;
+
 	void Start () {
 		this.timer = new HTTimer();
 	}
@@ -56,7 +73,7 @@ public class HTWindEmitter : MonoBehaviour {
 		this.EmitWindBlock();
 		if (minSeconds >= maxSeconds) {
 			throw new System.ArgumentException("Invalid parameters", "minSeconds is greater or equal to maxSeconds");
-		}
+		} 
 		this.emitWaitSecondsMin = minSeconds;
 		this.emitWaitSecondsMax = maxSeconds;
 		this.secondsToNextWindBlock = Random.Range(this.emitWaitSecondsMin, this.emitWaitSecondsMax);
@@ -67,20 +84,53 @@ public class HTWindEmitter : MonoBehaviour {
 //	//For straight paths
 //	public HTWindPath(int dir, float speed, float seconds, Vector2 angle)
 //
-//	//For sine paths
+//	//For wavy paths
 //	public HTWindPath(int dir, float speed, float seconds, float amplitude, float frequency)
 //	
 //	//For circular paths
-//	public HTWindPath(int dir, float speed, int revolutions, float radius)
+//	public HTWindPath(int dir, float speed, float radius)
 
 	
 	private void EmitWindBlock() {
 		Transform windBlockTransform = (Transform)Instantiate(this.windBlockFab, transform.position, transform.rotation);
-		List<HTWindPath> windPaths = new List<HTWindPath> {
-			new HTWindPath(this.dir, this.windSpeed, 5.0f, 10.0f, 1.0f),
-			new HTWindPath(this.dir, this.windSpeed, 2, 100.0f)
-		};
-		windBlockTransform.gameObject.GetComponent<HTWindPathController>().Init(windPaths, transform.localScale.y);
+		List<HTWindPath> windPaths = new List<HTWindPath>();
+		if (this.minWindSpeed > this.maxWindSpeed) {
+			throw new System.ArgumentException("Invalid parameters", "minWindSpeed is greater than maxWindSpeed");
+		}
+		float windSpeed = Random.Range(this.minWindSpeed, this.maxWindSpeed);
+
+		if (this.minDurationSeconds > this.maxDurationSeconds) {
+			throw new System.ArgumentException("Invalid parameters", "minDurationSeconds is greater than maxDurationSeconds");
+		}
+		List<HTWindPathHelper.WindPath> windTrack = new List<HTWindPathHelper.WindPath>();
+		switch (this.template) {
+		case HTWindPathHelper.WindPathTemplate.STRAIGHT:
+			windPaths.Add(new HTWindPath(this.dir, windSpeed, 
+			Random.Range(this.minDurationSeconds, this.maxDurationSeconds), new Vector2(0, Random.Range(-this.absoluteMaxAngle, this.absoluteMaxAngle))));
+			windTrack = HTWindPathHelper.straight;
+			break;
+		case HTWindPathHelper.WindPathTemplate.WAVEY:
+			windPaths.Add(new HTWindPath(this.dir, windSpeed, 
+				Random.Range(this.minDurationSeconds, this.maxDurationSeconds), this.amplitude, this.frequency));
+			windTrack = HTWindPathHelper.wavey;
+			break;
+		case HTWindPathHelper.WindPathTemplate.STRAIGHTWAVEY:
+			windPaths.Add(new HTWindPath(this.dir, windSpeed, 
+			Random.Range(this.minDurationSeconds, this.maxDurationSeconds), new Vector2(0, Random.Range(-this.absoluteMaxAngle, this.absoluteMaxAngle))));
+			windTrack = HTWindPathHelper.straightWavey;
+			break;
+		case HTWindPathHelper.WindPathTemplate.WAVEYLOOP:
+			windPaths.Add(new HTWindPath(this.dir, windSpeed, 
+			Random.Range(this.minDurationSeconds, this.maxDurationSeconds), this.amplitude, this.frequency));
+			windPaths.Add(new HTWindPath(this.dir, windSpeed, this.radius));
+			windTrack = HTWindPathHelper.waveyLoop;
+			break;
+		default:
+			//fuck you
+			break;
+		}
+		windBlockTransform.gameObject.GetComponent<HTWindPathController>().Init(windTrack, windPaths, new Vector2(transform.position.x, 
+			transform.position.y + Random.Range(-transform.localScale.y / 2, transform.localScale.y / 2)), this.windBlockScale, this.windBlockColliderYScale);
 	}
 	
 	

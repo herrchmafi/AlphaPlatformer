@@ -493,9 +493,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   windBlockFab: {fileID: 471402, guid: cd070b47739dd11469261dab3fa4bd8a, type: 2}
-  windSpeed: 2
-  windBlockDuration: 3
-  dir: -1
+  dir: 1
+  minWindSpeed: 3
+  maxWindSpeed: 5
+  windBlockColliderYScale: 3
+  windBlockScale: 1
+  absoluteMaxAngle: 15
+  amplitude: 10
+  frequency: 3
+  minDurationSeconds: 3
+  maxDurationSeconds: 5
+  radius: 5
+  emitWaitSecondsMin: 1
+  emitWaitSecondsMax: 3
+  template: 2
 --- !u!1 &337387874
 GameObject:
   m_ObjectHideFlags: 0

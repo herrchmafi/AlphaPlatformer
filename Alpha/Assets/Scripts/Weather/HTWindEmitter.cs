@@ -41,7 +41,8 @@ public class HTWindEmitter : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKeyDown("1")) {
-			this.StartEmissionsWithRandomWait(3.0f, 10.0f);
+//			this.StartEmissionsWithRandomWait(3.0f, 10.0f);
+			this.EmitWindBlock();
 		} else if (Input.GetKeyDown("2")) {
 			this.Stop();
 		} else if (Input.GetKeyDown("3")) {
@@ -85,14 +86,15 @@ public class HTWindEmitter : MonoBehaviour {
 //	public HTWindPath(int dir, float speed, float seconds, Vector2 angle)
 //
 //	//For wavy paths
-//	public HTWindPath(int dir, float speed, float seconds, float amplitude, float frequency)
+//	public HTWindPath(int dir, float speed, float seconds, Vector2 angle, float amplitude, float frequency)
 //	
 //	//For circular paths
 //	public HTWindPath(int dir, float speed, float radius)
 
 	
 	private void EmitWindBlock() {
-		Transform windBlockTransform = (Transform)Instantiate(this.windBlockFab, transform.position, transform.rotation);
+		Transform windBlockTransform = (Transform)Instantiate(this.windBlockFab, new Vector3(transform.position.x, 
+			transform.position.y + Random.Range(-transform.localScale.y / 2, transform.localScale.y / 2), -1.0f), transform.rotation);
 		List<HTWindPath> windPaths = new List<HTWindPath>();
 		if (this.minWindSpeed > this.maxWindSpeed) {
 			throw new System.ArgumentException("Invalid parameters", "minWindSpeed is greater than maxWindSpeed");
@@ -111,7 +113,7 @@ public class HTWindEmitter : MonoBehaviour {
 			break;
 		case HTWindPathHelper.WindPathTemplate.WAVEY:
 			windPaths.Add(new HTWindPath(this.dir, windSpeed, 
-				Random.Range(this.minDurationSeconds, this.maxDurationSeconds), this.amplitude, this.frequency));
+				Random.Range(this.minDurationSeconds, this.maxDurationSeconds), new Vector2(0, Random.Range(-this.absoluteMaxAngle, this.absoluteMaxAngle)), this.amplitude, this.frequency));
 			windTrack = HTWindPathHelper.wavey;
 			break;
 		case HTWindPathHelper.WindPathTemplate.STRAIGHTWAVEY:
@@ -121,7 +123,7 @@ public class HTWindEmitter : MonoBehaviour {
 			break;
 		case HTWindPathHelper.WindPathTemplate.WAVEYLOOP:
 			windPaths.Add(new HTWindPath(this.dir, windSpeed, 
-			Random.Range(this.minDurationSeconds, this.maxDurationSeconds), this.amplitude, this.frequency));
+				Random.Range(this.minDurationSeconds, this.maxDurationSeconds), new Vector2(0, Random.Range(-this.absoluteMaxAngle, this.absoluteMaxAngle)), this.amplitude, this.frequency));
 			windPaths.Add(new HTWindPath(this.dir, windSpeed, this.radius));
 			windTrack = HTWindPathHelper.waveyLoop;
 			break;
@@ -129,8 +131,7 @@ public class HTWindEmitter : MonoBehaviour {
 			//fuck you
 			break;
 		}
-		windBlockTransform.gameObject.GetComponent<HTWindPathController>().Init(windTrack, windPaths, new Vector2(transform.position.x, 
-			transform.position.y + Random.Range(-transform.localScale.y / 2, transform.localScale.y / 2)), this.windBlockScale, this.windBlockColliderYScale);
+		windBlockTransform.gameObject.GetComponent<HTWindPathController>().Init(windTrack, windPaths, transform.position, this.windBlockScale, this.windBlockColliderYScale);
 	}
 	
 	

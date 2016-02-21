@@ -10,11 +10,8 @@ public class HTWindPathController : MonoBehaviour {
 	
 	public float fadeoutTime;
 	
-	private Vector2 auxEulerVect;
-	
 	// Use this for initializations
 	void Start () {
-		this.auxEulerVect = transform.eulerAngles;
 	}
 	
 	// Update is called once per frame
@@ -36,7 +33,7 @@ public class HTWindPathController : MonoBehaviour {
 //	public HTWindPath(int dir, float speed, float seconds, Vector2 angle)
 //
 //	//For wavy paths
-//	public HTWindPath(int dir, float speed, float seconds, float amplitude, float frequency)
+//	public HTWindPath(int dir, float speed, float seconds, Vector2 angle, float amplitude, float frequency)
 //	
 //	//For circular paths
 //	public HTWindPath(int dir, float speed, float radius)
@@ -44,7 +41,7 @@ public class HTWindPathController : MonoBehaviour {
 					this.windPaths.Add(new HTWindPath(path.Dir, path.Speed, path.Seconds, path.CurrentEulerAngle));
 					break;
 				case HTWindPathHelper.WindPath.WAVE:
-					this.windPaths.Add(new HTWindPath(path.Dir, path.Speed, path.Seconds, 10.0f, 3.0f));
+					this.windPaths.Add(new HTWindPath(path.Dir, path.Speed, path.Seconds, path.CurrentEulerAngle, 10.0f, 3.0f));
 					break;
 				case HTWindPathHelper.WindPath.LOOP:
 //					this.windPa
@@ -53,21 +50,21 @@ public class HTWindPathController : MonoBehaviour {
 					break;
 				}
 				path = this.windPaths[this.windIndex];
-				path.Setup(this.auxEulerVect, transform.position);
+				path.Setup(transform.position);
 			}
-			this.auxEulerVect = path.EulerAngulate(Time.deltaTime);
-			transform.position = path.Translate(transform.position, Time.deltaTime, this.auxEulerVect);
+			transform.eulerAngles = path.EulerAngulate(Time.deltaTime);
+			transform.position = path.Translate(transform.position, Time.deltaTime, transform.eulerAngles);
 		}
 	}
 	//Use if durations are known
-	public void Init (List<HTWindPathHelper.WindPath> windTrack, List<HTWindPath> windPaths, Vector2 position, float scale, float colliderYScale) {
+	public void Init (List<HTWindPathHelper.WindPath> windTrack, List<HTWindPath> windPaths, Vector3 position, float scale, float colliderYScale) {
 		this.windPaths = windPaths;
 		if (this.windPaths.Count == 0) {
 			return;
 		}
 		this.windTrack = windTrack;
 		this.windPaths = windPaths;
-		this.windPaths[0].Setup(transform.eulerAngles, position);
+		this.windPaths[0].Setup(position);
 		TrailRenderer trailRenderer = GetComponent<TrailRenderer>();
 		trailRenderer.startWidth = trailRenderer.startWidth * scale;
 		transform.localScale = scale * new Vector2(transform.localScale.x, transform.localScale.y);

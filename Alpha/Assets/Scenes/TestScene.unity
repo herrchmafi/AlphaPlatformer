@@ -476,7 +476,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 175738274}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.21, y: 1.5, z: 0}
+  m_LocalPosition: {x: -7.21, y: 1.5, z: -1}
   m_LocalScale: {x: 1, y: 3, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -498,11 +498,11 @@ MonoBehaviour:
   maxWindSpeed: 5
   windBlockColliderYScale: 3
   windBlockScale: 1
-  absoluteMaxAngle: 15
+  absoluteMaxAngle: 30
   amplitude: 10
   frequency: 3
-  minDurationSeconds: 3
-  maxDurationSeconds: 5
+  minDurationSeconds: 1
+  maxDurationSeconds: 3
   radius: 5
   emitWaitSecondsMin: 1
   emitWaitSecondsMax: 3
